@@ -98,11 +98,12 @@ public class MahalanobisTest {
 
     @Test
     public void test4() {
-        int N = 5;
+        int N = 5, K=10000;
+        double P=0.67;
         ec.tstoolkit.mdata.MultivariateData.Factory fac = new ec.tstoolkit.mdata.MultivariateData.Factory(N);
         Normal n = new Normal();
         IRandomNumberGenerator rng = ec.tstoolkit.random.MersenneTwister.fromSystemNanoTime();
-        for (int i = 0; i < 10000000; ++i) {
+        for (int i = 0; i < K; ++i) {
             double[] x = new double[N];
             for (int j = 0; j < N; ++j) {
                 x[j] = n.random(rng);
@@ -113,8 +114,7 @@ public class MahalanobisTest {
         ec.tstoolkit.mdata.MultivariateData md = new ec.tstoolkit.mdata.MultivariateData();
         md.set(m);
         ec.tstoolkit.mdata.Mahalanobis mh = new ec.tstoolkit.mdata.Mahalanobis(md);
-        int[] o = mh.searchOutliers(.99);
-        System.out.println("SIMUL");
-        System.out.println(o.length);
+        int[] o = mh.searchOutliers(P);
+        assertTrue(Math.abs(K*(1-P)-o.length)<=K/100);
     }
 }
